@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
 import Button from "../../../Components/UI/Button/Button";
 import Spinner from "../../../Components/UI/Spinner/spinner";
 import style from "./ContactData.module.css";
@@ -91,8 +92,8 @@ class ContactData extends Component {
     }
 
     const order = {
-      ingredient: this.props.ingredients,
-      price: this.props.totalPrice,
+      ingredient: this.props.ings,
+      price: this.props.price,
       orderData: formData,
     };
 
@@ -192,5 +193,10 @@ class ContactData extends Component {
     );
   }
 }
-
-export default withRouter(ContactData);
+const mapStateToProps = state => {
+  return{
+    ings: state.ingredient,
+    price: state.totalPrice
+  }
+}
+export default connect(mapStateToProps)(ContactData);
