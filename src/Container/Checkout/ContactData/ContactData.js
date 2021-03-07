@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import Button from "../../../Components/UI/Button/Button";
 import Spinner from "../../../Components/UI/Spinner/spinner";
 import style from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import { withRouter } from "react-router-dom";
 import Input from "../../../Components/UI/Input/Input";
+import * as actions from "../../../store/actions/index";
 class ContactData extends Component {
   state = {
     orderFrom: {
@@ -79,12 +80,11 @@ class ContactData extends Component {
       },
     },
     formIsValid: false,
-    loading: false,
   };
 
   orderHandler = (e) => {
     e.preventDefault();
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
     //// Only taking the value attribue of the orderFrom to submit
     const formData = {};
     for (let formEl in this.state.orderFrom) {
@@ -96,16 +96,7 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: formData,
     };
-
-    axios
-      .post("/orders.json", order)
-      .then((res) => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch((err) => {
-        this.setState({ loading: false });
-      });
+    this.props.onOrderBurger(order);
   };
   inputChangedHandler = (event, inputIdentifier) => {
     // When we try to clone the orderForm in the state, we only clone the first layer of that object, which means other down layer like attribute of other objects in orderform have been not deeply cloned yet. So we also have to clone to the layer object that we want to take its attribute otherwise we still pointing to the data in the state which is not a apropriate way to change data in the state
@@ -128,11 +119,11 @@ class ContactData extends Component {
     //// We put the clone value attribute to the clone orderForm
     updatingForm[inputIdentifier] = updatedFormElement;
     //// We put the clone orderForm to the actually form in the state object.
-    
+
     /// Check everything is valid
     let formIsValid = true;
-    for(let inputId in updatingForm){
-        formIsValid = updatingForm[inputId].valid && formIsValid;
+    for (let inputId in updatingForm) {
+      formIsValid = updatingForm[inputId].valid && formIsValid;
     }
     console.log(formIsValid);
     this.setState({ orderFrom: updatingForm, formIsValid: formIsValid });
@@ -164,7 +155,7 @@ class ContactData extends Component {
     }
     let form;
 
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner></Spinner>;
     } else {
       form = (
@@ -181,7 +172,9 @@ class ContactData extends Component {
             ></Input>
           ))}
 
-          <Button btnType="Success" disabled={!this.state.formIsValid}>Order</Button>
+          <Button btnType="Success" disabled={!this.state.formIsValid}>
+            Order
+          </Button>
         </form>
       );
     }
@@ -193,10 +186,16 @@ class ContactData extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return{
-    ings: state.ingredient,
-    price: state.totalPrice
-  }
-}
-export default connect(mapStateToProps)(ContactData);
+const mapStateToProps = (state) => {
+  return {
+    ings: state.burgerBuilder.ingredient,
+    price: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
