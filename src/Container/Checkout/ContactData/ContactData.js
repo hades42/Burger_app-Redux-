@@ -96,7 +96,7 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: formData,
     };
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order, this.props.idToken);
   };
   inputChangedHandler = (event, inputIdentifier) => {
     // When we try to clone the orderForm in the state, we only clone the first layer of that object, which means other down layer like attribute of other objects in orderform have been not deeply cloned yet. So we also have to clone to the layer object that we want to take its attribute otherwise we still pointing to the data in the state which is not a apropriate way to change data in the state
@@ -191,11 +191,12 @@ const mapStateToProps = (state) => {
     ings: state.burgerBuilder.ingredient,
     price: state.burgerBuilder.totalPrice,
     loading: state.order.loading,
+    idToken: state.auth.idToken,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData)),
+    onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
