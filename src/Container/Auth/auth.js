@@ -41,6 +41,13 @@ class Auth extends Component {
     isSignup: true,
   };
 
+  componentDidMount(){
+    // If the user doesn't build any burger and the authRedirectPath is not "/", the user is not allowed the access checkout page and will be redirect to the homepage. By default onSetAuthRedirectPath() redirect to the homepage.
+    if(!this.props.building && this.props.authRedirectPath !== "/"){
+        this.props.onSetAuthRedirectPath();
+    }
+  }
+
   checkValidity(value, rules) {
     let isValid = true;
     if (!rules) {
@@ -131,7 +138,9 @@ class Auth extends Component {
 
     let authRedirect = null;
     if (this.props.isAuthenticated) {
-      authRedirect = <Redirect to="/"></Redirect>;
+      // when the user dont have an account or dont login and they order a burger we have to redirect them to authenticated page and set and authRedirectpath in redux store to the "/checkout" (we do this in the purchasehandler of the burgerBuilder). When the user does create an account or login successfully, the isAuthenticated will turn to true and we will redirect to the authRedirectPath we did store in the auth redux which is the "/checkout". We will not reload the page the all the ingredient the user built before would be still there.  
+       
+      authRedirect = <Redirect to={this.props.authRedirectPath}></Redirect>;
     }
 
     return (
@@ -154,12 +163,15 @@ const mapStateToProps = (state) => {
     loading: state.auth.loading,
     error: state.auth.error,
     isAuthenticated: state.auth.idToken,
+    building: state.burgerBuilder.building,
+    authRedirectPath: state.auth.authRedirectPath,
   };
 };
 const mapDispathToProps = (dispatch) => {
   return {
     onAuth: (email, password, isSignup) =>
       dispatch(actions.auth(email, password, isSignup)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
   };
 };
 export default connect(mapStateToProps, mapDispathToProps)(Auth);
