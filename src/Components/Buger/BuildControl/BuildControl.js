@@ -45,7 +45,7 @@ class BuildControls extends React.Component {
           disabled={!this.props.purchasable}
           onClick={this.props.purchasing}
         >
-          ORDER NOW
+          {this.props.isAuth ? "ORDER NOW" : "SIGN UP TO ORDER"}
         </button>
       </div>
     );
