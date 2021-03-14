@@ -17,7 +17,7 @@ class App extends Component {
       <Switch>
         <Route path="/auth" component={Auth}></Route>
         <Route path="/" exact component={BurgerBuider}></Route>
-        <Redirect to="/"></Redirect>
+        {/* <Redirect to="/"></Redirect> */}
       </Switch>
     );
     if (this.props.isAuthenticated) {
