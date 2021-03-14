@@ -4,7 +4,7 @@ import Button from "../../Components/UI/Button/Button";
 import style from "./auth.module.css";
 import * as actions from "../../store/actions/auth";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 import Spinner from "../../Components/UI/Spinner/spinner";
 class Auth extends Component {
   state = {
@@ -162,8 +162,8 @@ const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    isAuthenticated: state.auth.idToken,
     building: state.burgerBuilder.building,
+    isAuthenticated: state.auth.idToken !== null,
     authRedirectPath: state.auth.authRedirectPath,
   };
 };
@@ -174,4 +174,4 @@ const mapDispathToProps = (dispatch) => {
     onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
   };
 };
-export default connect(mapStateToProps, mapDispathToProps)(Auth);
+export default withRouter(connect(mapStateToProps, mapDispathToProps)(Auth));
