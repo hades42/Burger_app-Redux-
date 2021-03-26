@@ -3,7 +3,6 @@ import React from "react";
 import styles from "./NavItem.module.css";
 import Item from "../NavItem/Item/Item";
 const NavItem = (props) => {
-  console.log(props);
   return (
     <ul className={styles.NavItem}>
       <Item LinkTo="/" exact>

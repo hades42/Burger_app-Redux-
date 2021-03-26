@@ -22,7 +22,6 @@ class Layout extends React.Component {
     });   
   };
   render() {
-    console.log(this.props.isAuthenticated);
     return (
       <Aux name="Van Nguyen">
         <SideDrawer

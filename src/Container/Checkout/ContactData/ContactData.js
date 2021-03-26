@@ -7,6 +7,7 @@ import axios from "../../../axios-orders";
 import { withRouter } from "react-router-dom";
 import Input from "../../../Components/UI/Input/Input";
 import * as actions from "../../../store/actions/index";
+import {checkValidity} from "../../../shared/utility";
 class ContactData extends Component {
   state = {
     orderFrom: {
@@ -112,7 +113,7 @@ class ContactData extends Component {
     };
     //// We change the value attribute of the object
     updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
+    updatedFormElement.valid = checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
@@ -126,7 +127,6 @@ class ContactData extends Component {
     for (let inputId in updatingForm) {
       formIsValid = updatingForm[inputId].valid && formIsValid;
     }
-    console.log(formIsValid);
     this.setState({ orderFrom: updatingForm, formIsValid: formIsValid });
   };
 

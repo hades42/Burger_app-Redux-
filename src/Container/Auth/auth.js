@@ -6,6 +6,7 @@ import * as actions from "../../store/actions/auth";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 import Spinner from "../../Components/UI/Spinner/spinner";
+import {checkValidity} from "../../shared/utility"
 class Auth extends Component {
   state = {
     controls: {
@@ -85,7 +86,7 @@ class Auth extends Component {
       [controlName]: {
         ...this.state.controls[controlName],
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.controls[controlName].validation
         ),
