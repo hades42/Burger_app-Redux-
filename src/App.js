@@ -2,7 +2,7 @@ import Layout from "./Components/Layout/Layout";
 import BurgerBuider from "./Container/BurgurBuilder/BurgerBuilder";
 import Checkout from "./Container/Checkout/Checkout";
 import Orders from "./Container/Orders/Orders";
-import { Route, Switch, Redirect, withRouter} from "react-router-dom";
+import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import Auth from "./Container/Auth/auth";
 import Logout from "./Container/Auth/Logout/Logout";
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ class App extends Component {
       <Switch>
         <Route path="/auth" component={Auth}></Route>
         <Route path="/" exact component={BurgerBuider}></Route>
-        {/* <Redirect to="/"></Redirect> */}
+        <Redirect to="/"></Redirect>
       </Switch>
     );
     if (this.props.isAuthenticated) {
@@ -26,6 +26,8 @@ class App extends Component {
           <Route path="/logout" component={Logout}></Route>
           <Route path="/checkout" component={Checkout}></Route>
           <Route path="/orders" component={Orders}></Route>
+          {/* Fixing the error of not being able to resever the information of burger component and redirect to the checkout page when the user signing in. Because we split the router into 2 stage and stage 2 doesnt have the auth component which help us to redirect to the checkout page. We need to add auth compenent into both stage of the routes. */}
+          <Route path="/auth" component={Auth}></Route>
           <Route path="/" exact component={BurgerBuider}></Route>
           <Redirect to="/"></Redirect>
         </Switch>
@@ -34,9 +36,7 @@ class App extends Component {
 
     return (
       <div>
-        <Layout>
-          {routes}
-        </Layout>
+        <Layout>{routes}</Layout>
       </div>
     );
   }
